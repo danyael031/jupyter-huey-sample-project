@@ -25,3 +25,16 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+
+Run Huey Consumer:
+
+```sh
+huey_consumer.py consumer_entrypoint.huey -w 10 -k greenlet
+
+```
+
+
+## References
+
+- <https://huey.readthedocs.io/en/latest/guide.html>
+

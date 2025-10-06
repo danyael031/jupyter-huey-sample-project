@@ -2,3 +2,4 @@ notebook==7.4.7
 gevent==25.9.1
 greenlet==3.2.4
 huey==2.5.3
+requests==2.32.5
