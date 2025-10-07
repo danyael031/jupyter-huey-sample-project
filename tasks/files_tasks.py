@@ -1,6 +1,7 @@
 from huey_queue.queue import huey
-from huey.api import Task
+from huey.api import Task, ResultGroup
 from typing import List
+from utils.zip import zip_folders
 import requests
 import os
 
@@ -26,7 +27,21 @@ def fetch_post_and_save_file(post_id: int, task: Task):
     return file_path
 
 
-# TO-DO: Bulk fetch and save file
-#@huey.task(context=True)
-#def bulk_fetch_post_and_save_file(posts_id: List[int] , task: Task):
-#    pass
+@huey.task(context=True)
+def bulk_fetch_post_and_save_file(posts_ids: List[int] , task: Task):
+
+    enqueued_subtasks: List[Task] = [fetch_post_and_save_file(post_id) for post_id in posts_ids]
+
+    # Create a resource group to wait for all the tasks to complete
+    rg = ResultGroup(enqueued_subtasks)
+    rg.get(blocking=True)
+
+
+    folders_list = []
+    for subtask in enqueued_subtasks:
+        folders_list.append(f'./output/{subtask.id}/')
+
+    bulk_output_path = f'./output/{task.id}/zipped_posts.zip'
+    zip_folders(folders_list, bulk_output_path)
+
+    return bulk_output_path
