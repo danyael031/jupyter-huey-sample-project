@@ -34,7 +34,7 @@ pip install -r requirements.txt
 In a terminal with the virtual environment activated run the huey consumer:
 
 ```sh
-huey_consumer.py consumer_entrypoint.huey -w 10 -k greenlet
+huey_consumer consumer_entrypoint.huey -w 10 -k greenlet
 ```
 
 In a different terminal, also with the virtual environment activated, run
